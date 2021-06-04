@@ -1,5 +1,5 @@
 <template>
-  <li data-cy="dep" class="bg-blue-50 p-4">
+  <li data-cy="dep" class="bg-blue-100 p-4 border-b border-blue-600">
     <p class="flex justify-between pb-2">
       <div class="text-md font-bold">
         {{ dependency.packageName }}

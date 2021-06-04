@@ -27,7 +27,7 @@ export default defineComponent({
   <div class="absolute bottom-2 right-2">
     <button
       @click="$emit('prev')"
-      class="rounded ml-2 px-2 border border-indigo-600"
+      class="rounded ml-2 px-2 border border-blue-600"
       :class="{ invisible: firstStep }"
     >
       Previous
@@ -35,14 +35,7 @@ export default defineComponent({
     <button
       @click="$emit('next')"
       :disabled="disabled"
-      class="
-        rounded
-        ml-2
-        px-2
-        border border-indigo-600
-        bg-indigo-600
-        text-light-50
-      "
+      class="rounded ml-2 px-2 border border-blue-600 bg-blue-600 text-light-50"
       :class="{ 'opacity-50': disabled, invisible: lastStep }"
     >
       Next

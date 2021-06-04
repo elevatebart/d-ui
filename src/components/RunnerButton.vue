@@ -21,7 +21,7 @@
       :class="selected ? 'border-blue-500' : 'border-gray-500'"
       :checked="selected"
     />
-    <img class="mr-3 inline" src="https://via.placeholder.com/50" />
+    <img class="mr-3 h-12 w-12 inline" src="https://via.placeholder.com/48" />
     {{ testingType }}
   </label>
 </template>
