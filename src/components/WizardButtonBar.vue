@@ -36,9 +36,9 @@ export default defineComponent({
       @click="$emit('next')"
       :disabled="disabled"
       class="rounded ml-2 px-2 border border-blue-600 bg-blue-600 text-light-50"
-      :class="{ 'opacity-50': disabled, invisible: lastStep }"
+      :class="{ 'opacity-50': disabled }"
     >
-      Next
+      {{ lastStep ? 'Launch' : 'Next' }}
     </button>
   </div>
 </template>
