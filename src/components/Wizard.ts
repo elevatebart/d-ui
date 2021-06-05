@@ -1,9 +1,17 @@
-import { Component, computed, defineComponent, h, PropType, ref } from 'vue'
+import {
+  Component,
+  computed,
+  defineComponent,
+  h,
+  inject,
+  onMounted,
+  PropType,
+  provide,
+  ref,
+} from 'vue'
 import WizardButtonBar from './WizardButtonBar.vue'
 
-const stepNumber = ref(0)
-
-let lastStepIndex: number
+const wizardStateKey = Symbol()
 
 export const Wizard = defineComponent({
   setup(_, { slots }) {
@@ -11,10 +19,33 @@ export const Wizard = defineComponent({
       .default?.()
       .filter((childNode) => (childNode.type as Component).name === 'Step')
 
-    lastStepIndex = (stepChildren?.length || 0) - 1
+    const stepNumber = ref(0)
+
+    const prev = () => {
+      stepNumber.value--
+    }
+
+    const next = () => {
+      stepNumber.value++
+    }
+
+    const lastStepIndex = (stepChildren?.length || 0) - 1
+
+    const validateNextRef = ref(() => true)
+    const validateNext = () => validateNextRef.value()
+
+    provide(wizardStateKey, { validateNextRef })
+
     return () =>
       h('div', { class: 'p-3', key: stepNumber.value }, [
         stepChildren?.[stepNumber.value],
+        h(WizardButtonBar, {
+          onPrev: prev,
+          onNext: next,
+          firstStep: stepNumber.value === 0,
+          lastStep: stepNumber.value === lastStepIndex,
+          validateNext,
+        }),
       ])
   },
 })
@@ -27,24 +58,12 @@ export const Step = defineComponent({
       default: () => true,
     },
   },
+
   setup({ validateNext }, { slots }) {
-    const prev = () => {
-      stepNumber.value--
-    }
-
-    const next = () => {
-      stepNumber.value++
-    }
-
-    return () => [
-      slots.default?.(),
-      h(WizardButtonBar, {
-        onPrev: prev,
-        onNext: next,
-        firstStep: stepNumber.value === 0,
-        lastStep: stepNumber.value === lastStepIndex,
-        validateNext,
-      }),
-    ]
+    const { validateNextRef } = inject(wizardStateKey)!
+    onMounted(() => {
+      validateNextRef.value = validateNext
+    })
+    return () => [slots.default?.()]
   },
 })
